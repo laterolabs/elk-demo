@@ -1,19 +1,20 @@
 require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'active_storage/engine'
+require 'action_controller/railtie'
 # require "action_mailer/railtie"
-require "action_mailbox/engine"
-require "action_text/engine"
-require "action_view/railtie"
+# require "action_mailbox/engine"
+# require "action_text/engine"
+# require "action_view/railtie"
 # require "action_cable/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
+require './app/middleware/application_logger_middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -33,5 +34,14 @@ module ElkDemo
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.autoload_paths << Rails.root.join('lib')
+    # config.eager_load_paths << Rails.root.join('lib')
+
+    # config.logstash.host = 'localhost'
+    # config.logstash.port = 5000
+    # config.logstash.type = :tcp
+    # config.logstash.ssl_enable = false
+    config.middle_logger = CloudWatchLogger
+    config.middleware.use ApplicationLoggerMiddleware
   end
 end
